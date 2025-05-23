@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json()); 
 app.use(cookieParser());
 const corsOption={
-    origin:'http://localhost:3000',
+    origin:'https://real-time-chat-app-xi-lyart.vercel.app',
     credentials:true
 };
 app.use(cors(corsOption)); 
@@ -26,7 +26,19 @@ app.use(cors(corsOption));
 // routes
 app.use("/api/v1/user",userRoute); 
 app.use("/api/v1/message",messageRoute);
+app.get("/",(req,res)=>{
+    res.send("Backend is running");
+});
  
+const path = require('path');
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Catch-all handler to serve index.html for any unmatched routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 server.listen(PORT, ()=>{
     connectDB();
